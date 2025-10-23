@@ -1,0 +1,5 @@
+# 1. Abre o crea el archivo .gitignore en la raíz de tu proyecto (C:\Users\Oreana\Documents\lamecatronica\backend)
+# 2. Agrega la línea:
+/node_modules
+# 3. Elimina la carpeta del índice de rastreo de Git:
+git rm -r --cached node_modules
