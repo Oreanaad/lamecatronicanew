@@ -11,9 +11,9 @@ dotenv.config();
 const app = express();
 
 // CORS: solo en desarrollo (para Vite)
-if (process.env.NODE_ENV !== "production") {
+
   app.use(cors());
-}
+
 
 app.use(express.json());
 
