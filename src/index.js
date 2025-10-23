@@ -12,7 +12,7 @@ const app = express();
 
 // CORS: solo en desarrollo (para Vite)
 if (process.env.NODE_ENV !== "production") {
-  app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+  app.use(cors({ origin: "*", credentials: true }));
 }
 
 app.use(express.json());
