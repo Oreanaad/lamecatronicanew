@@ -29,31 +29,30 @@ const transformPathToUrl = (gxPath) => {
  * * NOTA: Uso el operador de Coalescencia Nula (??) para priorizar MaquinaX
  * sobre maquinaX (esto asume que el backend SQL devuelve MaquinaX).
  */
-export function mapRow(row) {
-    // Función auxiliar para manejar el precio de forma limpia
-    const getPrecio = (r) => {
-        const precioValue = r.MaquinaPrecio != null ? r.MaquinaPrecio : r.maquinaPrecio;
-        return precioValue != null ? Number(precioValue) : null;
-    };
-    
-    // Función auxiliar para obtener y transformar las URLs
-    const getAndTransformUrl = (r, keyCapital, keyCamel) => {
-        const path = r[keyCapital] ?? r[keyCamel];
-        return transformPathToUrl(path);
-    };
+// Archivo: mapMaquina.js
 
+export function mapRow(row) {
+    // 1. Obtener el precio de forma tolerante:
+    //    Busca 'MaquinaPrecio' (alias SQL) o 'maquinaPrecio' (posiblemente directo)
+    const rawPrice = row.MaquinaPrecio ?? row.maquinaPrecio;
+    
+    // 2. CONSOLE.LOG FINAL: Verifica qué llega a este punto (verás el log en la consola de Node.js)
+    console.log("DEBUG MAPPER: Precio crudo recibido:", rawPrice); 
+
+    // 3. Mapeo y transformación de tipos
     return {
-        // Normalización de campos y valores
         maquinaId: row.MaquinaId ?? row.maquinaId,
         maquinaNombre: row.MaquinaNombre ?? row.maquinaNombre,
-        maquinaPrecio: getPrecio(row), // Utiliza la función auxiliar
-        maquinaDescripcion: row.MaquinaDescripcion ?? row.maquinaDescripcion ?? null,
-        maquinaArticulo: row.MaquinaArticulo ?? row.maquinaArticulo ?? null,
-        // Convierte a booleano de forma segura
-        maquinaWebEstado: !!(row.MaquinaWebEstado ?? row.maquinaWebEstado), 
         
-        // Aplica la transformación de URL
-        imagenUrlChica: getAndTransformUrl(row, 'ImagenUrlChica', 'imagenUrlChica'),
-        imagenUrl: getAndTransformUrl(row, 'ImagenUrl', 'imagenUrl'),
+        // 🚨 CLAVE: Mapeamos el precio asegurando que es un número o null 🚨
+        maquinaPrecio: (rawPrice != null && rawPrice !== '') ? Number(rawPrice) : null,
+        
+        maquinaDescripcion: row.MaquinaDescripcion ?? row.maquinaDescripcion,
+        maquinaArticulo: row.MaquinaArticulo ?? row.maquinaArticulo,
+        maquinaWebEstado: !!(row.MaquinaWebEstado ?? row.maquinaWebEstado),
+        
+        // Asumiendo que tienes la función transformPathToUrl en este archivo
+        imagenUrlChica: transformPathToUrl(row.ImagenUrlChica ?? row.imagenUrlChica),
+        imagenUrl: transformPathToUrl(row.MaquinaImage_GXI ?? row.imagenUrl),
     };
 }
