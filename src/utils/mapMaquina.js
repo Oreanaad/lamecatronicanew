@@ -9,7 +9,7 @@ const BASE_URL_GENEXUS = "http://lamecatronicac.myvnc.com/PublicTempStorage/mult
 const transformPathToUrl = (gxPath) => {
     // Si la ruta no existe o no es una cadena, devuelve una cadena vacía
     if (!gxPath || typeof gxPath !== 'string') {
-        return ''; 
+        return null; 
     }
     
     // Verifica y remueve el prefijo "gxdbfile:"
@@ -30,29 +30,25 @@ const transformPathToUrl = (gxPath) => {
  * sobre maquinaX (esto asume que el backend SQL devuelve MaquinaX).
  */
 // Archivo: mapMaquina.js
-
 export function mapRow(row) {
     // 1. Obtener el precio de forma tolerante:
-    //    Busca 'MaquinaPrecio' (alias SQL) o 'maquinaPrecio' (posiblemente directo)
     const rawPrice = row.MaquinaPrecio ?? row.maquinaPrecio;
     
-    // 2. CONSOLE.LOG FINAL: Verifica qué llega a este punto (verás el log en la consola de Node.js)
-    console.log("DEBUG MAPPER: Precio crudo recibido:", rawPrice); 
-
+    // 🚨 DEBUG: Verifica qué llega a este punto (Ahora buscando los ALIAS) 🚨
+    console.log("DEBUG MAPPER: Fila completa:", row); 
+    
     // 3. Mapeo y transformación de tipos
     return {
         maquinaId: row.MaquinaId ?? row.maquinaId,
         maquinaNombre: row.MaquinaNombre ?? row.maquinaNombre,
         
-        // 🚨 CLAVE: Mapeamos el precio asegurando que es un número o null 🚨
+        // El precio sigue siendo validado como Number()
         maquinaPrecio: (rawPrice != null && rawPrice !== '') ? Number(rawPrice) : null,
         
         maquinaDescripcion: row.MaquinaDescripcion ?? row.maquinaDescripcion,
         maquinaArticulo: row.MaquinaArticulo ?? row.maquinaArticulo,
         maquinaWebEstado: !!(row.MaquinaWebEstado ?? row.maquinaWebEstado),
-        
-        // Asumiendo que tienes la función transformPathToUrl en este archivo
-        imagenUrlChica: transformPathToUrl(row.ImagenUrlChica ?? row.imagenUrlChica),
-        imagenUrl: transformPathToUrl(row.MaquinaImage_GXI ?? row.imagenUrl),
+      imagenUrlChica: transformPathToUrl(row.ImagenUrlChica ?? row.imagenUrlChica),
+        imagenUrl: transformPathToUrl(row.ImagenUrl ?? row.imagenUrl),
     };
 }
