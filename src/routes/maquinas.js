@@ -3,9 +3,11 @@ import { getMaquinas, getMaquinaById, getMaquinaImagenes} from "../controllers/m
 
 const router = Router();
 
-router.get("/", getMaquinas);           // lista publicadas
+router.get("/", getMaquinas);   
+router.get("/:id/imagenes", getMaquinaImagenes);        // lista publicadas
 router.get("/:id", getMaquinaById);  
-router.get("/api/maquinas/:id/imagenes", getMaquinaImagenes);   // detalle
+
+// detalle
 // varbinary → imagen
 
 export default router;
