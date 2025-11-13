@@ -64,3 +64,28 @@ export async function getMaquinaById(req, res) {
     res.status(500).json({ error: "Error obteniendo máquina" });
   }
 }
+
+/** GET /api/maquinas/:id/imagenes */
+export async function getMaquinaImagenes(req, res) {
+  try {
+    const { id } = req.params;
+    const pool = await getPool();
+
+    const result = await pool.request()
+      .input("id", sql.Int, id)
+      .query(`
+        SELECT 
+            MaquinasImgId,
+            MaquinaId,
+            MaquinasImgImagen_GXI AS ImagensUrl
+        FROM MaquinasImg
+        WHERE MaquinaId = @id
+        ORDER BY MaquinasImgId;
+      `);
+
+    res.json(result.recordset);
+  } catch (err) {
+    console.error("getMaquinaImagenes error:", err);
+    res.status(500).json({ error: "Error obteniendo imágenes de la máquina" });
+  }
+}
