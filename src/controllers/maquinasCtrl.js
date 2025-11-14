@@ -44,6 +44,7 @@ export async function getMaquinaById(req, res) {
           m.MaquinaDescripcion,
           m.MaquinaArticulo,
           m.MaquinaWebEstado,
+          m.MaquinaLink,
           m.MaquinaImagenChiquita_GXI AS ImagenUrlChica,
           m.MaquinaImage_GXI AS ImagenUrl
         FROM Maquina AS m
