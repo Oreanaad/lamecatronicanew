@@ -66,6 +66,10 @@ export async function getMaquinaById(req, res) {
 }
 
 /** GET /api/maquinas/:id/imagenes */
+import { transformPathToUrl } from "../utils/mapMaquina.js";
+
+/** GET /api/maquinas/:id/imagenes */
+/** GET /api/maquinas/:id/imagenes */
 export async function getMaquinaImagenes(req, res) {
   try {
     const { id } = req.params;
@@ -82,8 +86,27 @@ export async function getMaquinaImagenes(req, res) {
         WHERE MaquinaId = @id
         ORDER BY MaquinasImgId;
       `);
+console.log("🟩 RAW SQL ROWS:", result.recordset);
+    // 🔥 Aquí está el fix sin cambiar nombres
+   const imagenes = result.recordset.map(row => {
+  let rawPath = null;
 
-    res.json(result.recordset);
+  // tomamos absolutamente todas las variantes
+  rawPath = row.ImagensUrl 
+        ?? row.imagensUrl
+        ?? row.MaquinasImgImagen_GXI
+        ?? row.maquinasimgimagen_gxi
+        ?? null;
+
+  return {
+    maquinasImgId: row.MaquinasImgId,
+    maquinaId: row.MaquinaId,
+    ImagensUrl: transformPathToUrl(rawPath)
+  };
+});
+
+    res.json(imagenes);
+
   } catch (err) {
     console.error("getMaquinaImagenes error:", err);
     res.status(500).json({ error: "Error obteniendo imágenes de la máquina" });

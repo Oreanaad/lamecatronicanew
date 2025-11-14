@@ -6,7 +6,7 @@ const BASE_URL_GENEXUS = "http://lamecatronicac.myvnc.com/PublicTempStorage/mult
  * @param {string} gxPath La ruta devuelta por la BD, e.g., "gxdbfile:Gemini_...png"
  * @returns {string} La URL absoluta, e.g., "http://.../Gemini_...png"
  */
-const transformPathToUrl = (gxPath) => {
+export const transformPathToUrl = (gxPath) => {
     // Si la ruta no existe o no es una cadena, devuelve una cadena vacía
     if (!gxPath || typeof gxPath !== 'string') {
         return null; 
@@ -50,5 +50,6 @@ export function mapRow(row) {
         maquinaWebEstado: !!(row.MaquinaWebEstado ?? row.maquinaWebEstado),
       imagenUrlChica: transformPathToUrl(row.ImagenUrlChica ?? row.imagenUrlChica),
         imagenUrl: transformPathToUrl(row.ImagenUrl ?? row.imagenUrl),
+          
     };
 }
