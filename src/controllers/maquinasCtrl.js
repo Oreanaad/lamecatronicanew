@@ -15,6 +15,8 @@ export async function getMaquinas(req, res) {
         m.MaquinaDescripcion,
         m.MaquinaArticulo,
         m.MaquinaWebEstado,
+       m.MaquinaLink AS MaquinaLink,
+
         m.MaquinaImagenChiquita_GXI AS ImagenUrlChica,
         m.MaquinaImage_GXI          AS ImagenUrl
       FROM Maquina AS m
@@ -44,7 +46,8 @@ export async function getMaquinaById(req, res) {
           m.MaquinaDescripcion,
           m.MaquinaArticulo,
           m.MaquinaWebEstado,
-          m.MaquinaLink,
+         m.MaquinaLink AS MaquinaLink,
+
           m.MaquinaImagenChiquita_GXI AS ImagenUrlChica,
           m.MaquinaImage_GXI AS ImagenUrl
         FROM Maquina AS m

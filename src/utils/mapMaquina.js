@@ -30,26 +30,30 @@ export const transformPathToUrl = (gxPath) => {
  * sobre maquinaX (esto asume que el backend SQL devuelve MaquinaX).
  */
 // Archivo: mapMaquina.js
+// Archivo: mapMaquina.js
 export function mapRow(row) {
-    // 1. Obtener el precio de forma tolerante:
+    // Debug para verificar qué realmente viene
+    console.log("DEBUG MAPPER ROW:", row);
+
     const rawPrice = row.MaquinaPrecio ?? row.maquinaPrecio;
-    
-    // 🚨 DEBUG: Verifica qué llega a este punto (Ahora buscando los ALIAS) 🚨
-    console.log("DEBUG MAPPER: Fila completa:", row); 
-    
-    // 3. Mapeo y transformación de tipos
+
     return {
         maquinaId: row.MaquinaId ?? row.maquinaId,
         maquinaNombre: row.MaquinaNombre ?? row.maquinaNombre,
-        
-        // El precio sigue siendo validado como Number()
-        maquinaPrecio: (rawPrice != null && rawPrice !== '') ? Number(rawPrice) : null,
-        
+
+        maquinaPrecio: (rawPrice != null && rawPrice !== '') 
+            ? Number(rawPrice) 
+            : null,
+
         maquinaDescripcion: row.MaquinaDescripcion ?? row.maquinaDescripcion,
         maquinaArticulo: row.MaquinaArticulo ?? row.maquinaArticulo,
+
+        // 👈 EL CAMPO QUE FALTABA REALMENTE
+        maquinaLink: row.MaquinaLink ?? row.maquinaLink ?? null,
+
         maquinaWebEstado: !!(row.MaquinaWebEstado ?? row.maquinaWebEstado),
-      imagenUrlChica: transformPathToUrl(row.ImagenUrlChica ?? row.imagenUrlChica),
-        imagenUrl: transformPathToUrl(row.ImagenUrl ?? row.imagenUrl),
-          
+
+        imagenUrlChica: transformPathToUrl(row.ImagenUrlChica ?? row.imagenUrlChica),
+        imagenUrl: transformPathToUrl(row.ImagenUrl ?? row.imagenUrl)
     };
 }
